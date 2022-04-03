@@ -10,10 +10,18 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
+    USER_DETAILS_RESET,
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
-    USER_UPDATE_PROFILE_RESET
+    USER_UPDATE_PROFILE_RESET,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
+    USER_LIST_RESET,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
+    USER_DELETE_FAIL,
 } from '../constants/userConstants';
 
 export const userLoginReducer = (state = {}, action) => {
@@ -39,6 +47,7 @@ export const userLoginReducer = (state = {}, action) => {
                 error: ''
             };
         case USER_LOGOUT: 
+            localStorage.removeItem("cartItems");
             return {};
         default:
             return state;
@@ -94,6 +103,8 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
                 ...state,
                 error: ''
             };
+        case USER_DETAILS_RESET:
+            return { user: {} }
         default:
             return state;
     }
@@ -119,6 +130,64 @@ export const userUpdateProfileReducer = (state = { }, action) => {
             };
         case USER_UPDATE_PROFILE_RESET:
             return {};
+        case USER_ERROR_CLEAR:
+            return {
+                ...state,
+                error: ''
+            };
+        default:
+            return state;
+    }
+};
+
+export const userListReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+        case USER_LIST_REQUEST:
+            return {
+                loading: true,
+                ...state
+            };
+        case USER_LIST_SUCCESS:
+            return {
+                loading: false,
+                users: action.payload
+            };
+        case USER_LIST_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        case USER_LIST_RESET:
+            return {
+                users: []
+            };
+        case USER_ERROR_CLEAR:
+            return {
+                ...state,
+                error: ''
+            };
+        default:
+            return state;
+    }
+};
+
+export const userDeleteReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_DELETE_REQUEST:
+            return {
+                loading: true,
+                ...state
+            };
+        case USER_DELETE_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case USER_DELETE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
         case USER_ERROR_CLEAR:
             return {
                 ...state,

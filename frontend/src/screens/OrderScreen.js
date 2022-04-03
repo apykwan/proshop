@@ -4,9 +4,11 @@ import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PayPalButton } from 'react-paypal-button-v2';
+import moment from 'moment';
 
 import Loader from '../components/Loader';
-import { getOrderDetails } from '../actions/orderActions';
+import { getOrderDetails, payOrder, resetOrderPay } from '../actions/orderActions';
+import { emptyCartItems } from '../actions/cartActions';
 import Message from '../components/Message';
 
 const OrderScreen = ({ match }) => {
@@ -16,7 +18,7 @@ const OrderScreen = ({ match }) => {
 
     const dispatch = useDispatch();
     const { order, loading, error } = useSelector(state => state.orderDetails);
-    const { loading: loadingPay, success: successPay,  } = useSelector(state => state.orderPay);
+    const { loading: loadingPay, success: successPay } = useSelector(state => state.orderPay);
 
     useEffect(() => {
         const addPayPalScript = async () => {
@@ -31,8 +33,9 @@ const OrderScreen = ({ match }) => {
             document.body.appendChild(script);
         };    
 
-        if(!order || order._id !== orderId) {
-            dispatch(getOrderDetails(orderId))
+        if(!order || order._id !== orderId || successPay) {
+            dispatch(resetOrderPay());
+            dispatch(getOrderDetails(orderId));
         }
 
         if (order && !order.isPaid) {
@@ -42,10 +45,11 @@ const OrderScreen = ({ match }) => {
                 setSdkReady(true);
             }
         }
-    }, [dispatch, order, orderId]);
+    }, [dispatch, order, orderId, successPay]);
 
-    const successPaymentHandler = e => {
-        e.preventDefault();
+    const successPaymentHandler = paymentResult => {
+        dispatch(payOrder(orderId, paymentResult));
+        dispatch(emptyCartItems());
     }
 
     return (
@@ -63,13 +67,13 @@ const OrderScreen = ({ match }) => {
                                 <strong>Email: </strong><a href={`mailto:${order.user.email}`}>{order.user.email}</a>
                                 <p>
                                     <strong>Address: </strong>
-                                    {order.shippingAddress.address},
+                                    {order.shippingAddress.address}, {' '}
                                     {order.shippingAddress.city}{' '}
                                     {order.shippingAddress.postalCode}, {' '}
                                     {order.shippingAddress.country}
                                 </p>
                                 {order.isDelivered 
-                                    ? <Message variant="success">Delivered on {order.deliveredAt}</Message>
+                                    ? <Message variant="success">Delivered on {moment(order.deliveredAt).format('LLLL')}</Message>
                                     : <Message variant="warning">Not Delivered</Message>
                                 }
                             </ListGroup.Item>
@@ -80,7 +84,7 @@ const OrderScreen = ({ match }) => {
                                     {order.paymentMethod}
                                 </p>
                                 {order.isPaid 
-                                    ? <Message variant="success">Paid on {order.paidAt}</Message>
+                                    ? <Message variant="success">Paid on {moment(order.paidAt).format('LLLL')}</Message>
                                     : <Message variant="warning">Not Paid</Message>
                                 }
                             </ListGroup.Item>
