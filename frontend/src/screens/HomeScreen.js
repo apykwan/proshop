@@ -14,7 +14,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     dispatch(listProducts());
-  }, []);
+  }, [dispatch]);
 
   const productList = useMemo(() => {
       return products.map(product => (

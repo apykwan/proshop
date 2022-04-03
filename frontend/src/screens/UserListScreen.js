@@ -28,7 +28,6 @@ const UserListScreen = ({ history }) => {
                     <td>{user._id}</td>
                     <td>{user.name}</td>
                     <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
-                    <td>{user.isAdmin}</td>
                     <td>
                         {user.isAdmin 
                             ? (
@@ -38,14 +37,14 @@ const UserListScreen = ({ history }) => {
                             )}
                     </td>
                     <td>
-                        <LinkContainer to={`/user/${user._id}/edit`}>
+                        <LinkContainer to={`/admin/user/${user._id}/edit`}>
                             <Button variant="light" className="btn-sm">
                                 <i className="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
                         <Button 
                             variant="danger" 
-                            className="btn-sm" 
+                            className="btn-sm mx-3" 
                             onClick={() => {
                                 if (window.confirm('Are your sure?')) {
                                     dispatch(deleteUser(user._id));
