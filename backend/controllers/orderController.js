@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 
 import Order from '../models/orderModel.js'
+import Product from '../models/productModel.js'
 
 // @desc        Create new order
 // @route       POST /api/orders
@@ -64,6 +65,19 @@ export const updateOrderToPay = asyncHandler(async (req, res) => {
         throw new Error('Order not found');
     }
 
+    order.orderItems.forEach(async item => {
+        // Update product countInStock
+        const product = await Product.findById(item.product);
+
+        const checkStock = product.countInStock - item.qty;
+        if (checkStock < 0) {
+            throw new Error(`Sorry, ${product.name} is currently short of ${Math.abs(checkStock)} units`);
+        }
+
+        product.countInStock = checkStock;
+        await product.save();
+    });
+
     order.isPaid = true;
     order.paidAt = Date.now();
     if (order.paymentMethod === "PayPal") {
@@ -92,4 +106,39 @@ export const getMyOrders = asyncHandler(async (req, res) => {
     }
 
     res.json(orders);
+});
+
+// @desc        Get all orders
+// @route       GET /api/orders
+// @access      Private / Admin
+export const getOrders = asyncHandler(async (req, res) => {
+    const orders = await Order
+        .find()
+        .populate('user', 'name id');
+
+    if (!orders) {
+        res.status(404);
+        throw new Error('Orders not found');
+    }
+
+    res.json(orders);
+});
+
+// @desc        Update order to delivered
+// @route       PUT /api/orders/:id/pay
+// @access      Private
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
 });

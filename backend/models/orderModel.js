@@ -93,7 +93,7 @@ const orderSchema = new Schema({
         required: true,
         default: false
     },
-    delieveredAt: {
+    deliveredAt: {
         type: Date
     }  
 }, {

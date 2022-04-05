@@ -67,10 +67,58 @@ const products = [
     brand: 'Amazon',
     category: 'Electronics',
     price: 29.99,
-    countInStock: 0,
+    countInStock: 22,
     rating: 4,
     numReviews: 12,
   },
+  {
+    name: 'NVIDIA GeForce RTX 3090 Founders Edition',
+    image: '/images/rtx3090.jpg',
+    description:
+      'Powered by Ampere—NVIDIA’s 2nd gen RTX architecture—they double down on ray tracing and AI performance with enhanced Ray Tracing Cores, Tensor Cores, and new streaming multiprocessors.',
+    brand: 'Nivdia',
+    category: 'Electronics',
+    price: 1499.99,
+    countInStock: 0,
+    rating: 4.0,
+    numReviews: 1,
+  },
+  {
+    name: 'Harry Potter Box Set: The Complete Collection',
+    image: '/images/harrypotter.jpg',
+    description:
+      'A beautiful boxed set containing all seven Harry Potter novels in paperback, with huge child appeal, to bring Harry Potter to the next generation of readers.',
+    brand: 'J.K. Rowling',
+    category: 'Books',
+    price: 99.99,
+    countInStock: 20,
+    rating: 4.5,
+    numReviews: 40,
+  },
+  {
+    name: 'Tesla Model 3 Rear-Wheel Drive',
+    image: '/images/model3.jpg',
+    description:
+      'Model 3 is designed for electric-powered performance, with quick acceleration, long range and fast charging.',
+    brand: 'Tesla',
+    category: 'Auto',
+    price: 47000,
+    countInStock: 0,
+    rating: 4.5,
+    numReviews: 19,
+  },
+  {
+    name: 'Nongshim Shin Black Ramen (16 Pack)',
+    image: '/images/shinramen.jpg',
+    description:
+      'The rich beef bone broth, which is adequately spiced, contributes significantly to the taste of this premium grade broth.',
+    brand: 'Nongshim',
+    category: 'Food',
+    price: 42.98,
+    countInStock: 50,
+    rating: 5,
+    numReviews: 31,
+  }
 ]
 
 export default products;

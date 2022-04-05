@@ -2,6 +2,7 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Rating from './Rating';
+import { priceComa } from '../utils/helper';
 
 const Product = ({ product }) => {
     return (
@@ -22,7 +23,7 @@ const Product = ({ product }) => {
                     />
                 </Card.Text>
 
-                <Card.Text as="h3">${product.price}</Card.Text>
+                <Card.Text as="h3">${priceComa(product.price)}</Card.Text>
             </Card.Body>
         </Card>
     );

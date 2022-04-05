@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
 import Message from '../components/Message';
+import { priceComa } from '../utils/helper';
 
 const PlaceOrderScreen = ({ location, history }) => {
     const dispatch = useDispatch();
@@ -89,7 +90,7 @@ const PlaceOrderScreen = ({ location, history }) => {
                                                         </Link>
                                                     </Col>
                                                     <Col md={4}>
-                                                        {item.qty} X ${item.price} = ${item.qty * item.price}
+                                                        {item.qty} X ${item.price} = ${priceComa(item.qty * item.price)}
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
@@ -108,7 +109,7 @@ const PlaceOrderScreen = ({ location, history }) => {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Items</Col>
-                                    <Col>${itemsPrice}</Col>
+                                    <Col>${priceComa(itemsPrice)}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
@@ -120,13 +121,13 @@ const PlaceOrderScreen = ({ location, history }) => {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Tax</Col>
-                                    <Col>${taxPrice}</Col>
+                                    <Col>${priceComa(taxPrice)}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Total</Col>
-                                    <Col>${totalPrice}</Col>
+                                    <Col>${priceComa(totalPrice)}</Col>
                                 </Row>
                             </ListGroup.Item>
                             {error && <ListGroup.Item>

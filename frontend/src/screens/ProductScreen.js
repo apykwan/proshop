@@ -7,6 +7,7 @@ import { listProductDetails } from '../actions/productActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Rating from '../components/Rating';
+import { priceComa } from '../utils/helper';
 
 const ProductScreen = ({ history, match }) => {
     const [qty, setQty] = useState(1);
@@ -16,7 +17,7 @@ const ProductScreen = ({ history, match }) => {
 
     useEffect(() => {
         dispatch(listProductDetails(match.params.id));
-    }, [match.params.id]);
+    }, [match.params.id, dispatch]);
 
     const productDetails = useMemo(() => {
         return (
@@ -33,10 +34,10 @@ const ProductScreen = ({ history, match }) => {
                             <Rating value={product.rating} text={`${product.numReviews} reviews`}  />
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            Price: ${product.price}
+                            Price: ${priceComa(product.price)}
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            Description: ${product.description}
+                            Description: {product.description}
                         </ListGroup.Item>
                     </ListGroup>
                 </Col>
@@ -70,7 +71,7 @@ const ProductScreen = ({ history, match }) => {
                                                 Price: 
                                             </Col>
                                             <Col>
-                                                <strong>${product.price}</strong>
+                                                <strong>${priceComa(product.price)}</strong>
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>
