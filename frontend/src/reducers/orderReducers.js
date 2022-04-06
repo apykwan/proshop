@@ -152,7 +152,6 @@ export const orderDeliverReducer = (state = {}, action) => {
             return {
                 loading: false,
                 success: true,
-                order: action.payload
             };
         case ORDER_DELIVER_FAIL:
             return {

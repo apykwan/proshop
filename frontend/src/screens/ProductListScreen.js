@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import { 
     listProducts, 
     deleteProduct,
@@ -15,6 +16,7 @@ import { priceComa } from '../utils/helper';
 
 const ProductListScreen = ({ history, match }) => {
     const dispatch = useDispatch();
+    const pageNumber = match.params.pageNumber;
 
     const { loading, error, products } = useSelector(state => state.productList);
     const { userInfo } = useSelector(state => state.userLogin);
@@ -36,8 +38,8 @@ const ProductListScreen = ({ history, match }) => {
         if (!userInfo.isAdmin) return history.push('/login');
         if (successCreate) return history.push(`/admin/product/${createdProduct._id}/edit`);
 
-        dispatch(listProducts());
-    }, [userInfo, dispatch, history, successCreate, createdProduct, successDelete]);
+        dispatch(listProducts('', pageNumber));
+    }, [userInfo, dispatch, history, successCreate, createdProduct, successDelete, pageNumber]);
 
     const createProductHandler = () => {
         // using dummy data
@@ -98,21 +100,24 @@ const ProductListScreen = ({ history, match }) => {
                 : error 
                 ? <Message variant="danger">{error}</Message>
                 : (
-                    <Table striped bordered hover responsive className="table-sm">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>PRICE</th>
-                                <th>CATEGORY</th>
-                                <th>BRAND</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {productTable}
-                        </tbody>
-                    </Table>
+                    <div>
+                        <Table striped bordered hover responsive className="table-sm">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>PRICE</th>
+                                    <th>CATEGORY</th>
+                                    <th>BRAND</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {productTable}
+                            </tbody>
+                        </Table>
+                        <Paginate />
+                    </div>
                 )}
         </div>
     )

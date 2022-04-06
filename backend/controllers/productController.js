@@ -8,9 +8,50 @@ import Product from '../models/productModel.js'
 // @route       GET /api/products
 // @access      Public
 export const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({});
+    const pageSize = 4;
+    const page = Number(req.query.pageNumber) || 1;
 
-    res.json(products);
+    const keyword = req.query.keyword
+    ? {
+        $or: [
+          {
+            $or: [
+                {
+                    name: {
+                        $regex: req.query.keyword,
+                        $options: "i",
+                    },
+                },
+                {
+                    brand: {
+                        $regex: req.query.keyword,
+                        $options: "i",
+                    },
+                }
+            ]
+          },
+          {
+            description: {
+              $regex: req.query.keyword,
+              $options: "i",
+            },
+          },
+        ],
+      }
+    : {};
+
+    const count = await Product.countDocuments({ ...keyword })
+
+    const products = await Product
+        .find({ ...keyword })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+
+    res.json({
+        products,
+        page,
+        pages: Math.ceil(count / pageSize)
+    });
 });
 
 // @desc        Fetch single product
@@ -121,7 +162,7 @@ export const createProductReview = asyncHandler(async (req, res) => {
     const { rating, comment } = req.body;
 
     const alreadyReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString());
-    if (alreadyReviewed) throw new Error('You already reviewed the product!');
+    if (alreadyReviewed) throw new Error('You already reviewed this product!');
 
     const review = {
         name: req.user.name,

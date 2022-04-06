@@ -6,15 +6,18 @@ import { listProducts } from '../actions/productActions';
 import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Paginate from '../components/Paginate';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
   const dispatch = useDispatch();
+  const keyword = match.params.keyword;
+  const pageNumber = match.params.pageNumber;
   
   const { products, error, loading } = useSelector(state => state.productList);
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   const productList = useMemo(() => {
       return products.map(product => (
@@ -32,9 +35,12 @@ const HomeScreen = () => {
           : error 
           ? <Message variant="danger">{error}</Message> 
           : (
-            <Row>
-              {productList}
-            </Row>
+            <>
+              <Row>
+                {productList}
+              </Row>
+              <Paginate keyword={keyword ? keyword : ''} />
+            </>
           )}
     </>
   );

@@ -96,6 +96,18 @@ const products = [
     numReviews: 40,
   },
   {
+    name: 'Handmade Full Tang Katana',
+    image: '/images/katana.jpg',
+    description:
+      'Fully hand-made high manganese steel with blood grooves, the blade is roasted in blue and purple, and it emits blue and purple reflections under different light.',
+    brand: 'Samurai',
+    category: 'Weapons',
+    price: 259.99,
+    countInStock: 1,
+    rating: 0,
+    numReviews: 0,
+  },
+  {
     name: 'Tesla Model 3 Rear-Wheel Drive',
     image: '/images/model3.jpg',
     description:

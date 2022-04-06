@@ -17,15 +17,19 @@ import {
     PRODUCT_UPDATE_REQUEST,
     PRODUCT_UPDATE_SUCCESS,
     PRODUCT_UPDATE_FAIL,
-    PRODUCT_UPDATE_RESET
+    PRODUCT_UPDATE_RESET,
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_SUCCESS,
+    PRODUCT_CREATE_REVIEW_FAIL,
+    PRODUCT_CREATE_REVIEW_RESET
 } from '../constants/productConstants';
 
-export const listProducts = () => {
+export const listProducts = (keyword = "", pageNumber="") => {
     return async dispatch => {
         try {
             dispatch({ type: PRODUCT_LIST_REQUEST });
 
-            const { data } = await axios.get('/api/products');
+            const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
 
             dispatch({ 
                 type: PRODUCT_LIST_SUCCESS,
@@ -155,10 +159,41 @@ export const updateProduct = (id, product) => {
     }
 }
 
+export const createProductReview = (productId, review) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+
+            const { token } = getState().userLogin.userInfo;
+ 
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            await axios.post(`/api/products/${productId}/reviews`, review, config);
+       
+            dispatch({ 
+                type: PRODUCT_CREATE_REVIEW_SUCCESS
+            });
+        } catch (error) {
+            dispatch({ 
+                type: PRODUCT_CREATE_REVIEW_FAIL,
+                payload: error.response && error.response.data.message 
+                    ? error.response.data.message
+                    : error.message
+            });
+        }
+    }
+}
+
 export const resetProduct = () => {
     return dispatch => {
         dispatch({ type: PRODUCT_CREATE_RESET });
         dispatch({ type: PRODUCT_UPDATE_RESET });
         dispatch({ type: PRODUCT_DETAILS_RESET });
+        dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
 }

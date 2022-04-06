@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import colors from 'colors';
@@ -14,6 +16,13 @@ connectDB();
 
 const importData = async () => {
     try {
+        fs.readdir(`${path.resolve()}/uploads`, (err, files) => {
+            for (const file of files) {
+                fs.unlink(`${path.resolve()}/uploads/${file}`, err => {
+                    console.log(err);
+                })
+            }
+        });
         await Order.deleteMany();
         await Product.deleteMany();
         await User.deleteMany();
@@ -27,6 +36,8 @@ const importData = async () => {
                 user: adminUser
             };
         });
+        
+        fs.writeFile(`${path.resolve()}/uploads/file.txt`, 'Add to git repo', 'utf8', err => console.log(err));
 
         await Product.insertMany(sampleProducts);
 
@@ -40,9 +51,17 @@ const importData = async () => {
 
 const destroyData = async () => {
     try {
+        fs.readdir(`${path.resolve()}/uploads`, (err, files) => {
+            for (const file of files) {
+                fs.unlink(`${path.resolve()}/uploads/${file}`, err => {
+                    console.log(err);
+                })
+            }
+        });
         await Order.deleteMany();
         await Product.deleteMany();
         await User.deleteMany();
+        fs.writeFile(`${path.resolve()}/uploads/file.txt`, 'Add to git repo', 'utf8', err => console.log(err));
 
         console.log('Data Destroyed!'.red.inverse);
         process.exit(1);
