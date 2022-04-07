@@ -7,6 +7,7 @@ import { listProductDetails, createProductReview, resetProduct } from '../action
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Rating from '../components/Rating';
+import Meta from '../components/Meta';
 import { priceComa } from '../utils/helper';
 
 const ProductScreen = ({ history, match }) => {
@@ -74,6 +75,7 @@ const ProductScreen = ({ history, match }) => {
             ? <Message variant="danger">{error}</Message>
             : (
                 <>
+                    <Meta title={product.name} />
                     <Link className="btn btn-dark my-3" to="/">
                         Go Back
                     </Link>

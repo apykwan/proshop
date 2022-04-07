@@ -9,6 +9,7 @@ const Paginate = ({ keyword = "" }) => {
     const location = useLocation();
     const path = location.pathname.split('/page/')[0];
     const baseURL = path === '/' ? '' : path;
+    
     return (
         pages > 1 && (
             <Pagination className="mt-4">

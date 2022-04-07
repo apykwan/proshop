@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Rating = ({ value, text, color = "#f8e825" }) => {
+const Rating = ({ value, text, color = "#5cb85c" }) => {
   return (
     <div className="rating">
         <span>

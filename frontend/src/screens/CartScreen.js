@@ -5,6 +5,7 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import { addToCart, removeFromCart } from '../actions/cartActions';
 
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 import { priceComa } from '../utils/helper';
 
 const CartScreen = ({ match, location, history }) => {
@@ -33,6 +34,7 @@ const CartScreen = ({ match, location, history }) => {
 
     return (
         <Row>
+            <Meta title="Thank You for Shopping with us" />
             <Col md={8}>
                 <h1>Shopping Cart</h1>
                 {cartItems.length === 0 

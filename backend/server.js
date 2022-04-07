@@ -33,6 +33,12 @@ app.use('/api/orders', orderRoutes);
 // PayPal Client_Id
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
 
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(`${__dirname}/frontend/build`));
+
+    app.get('*', (req, res) => res.sendFile(`${__dirname}/frontend/build/index.html`));
+}
+
 app.use(notFound);
 app.use(errorHandler);
 
